@@ -22,6 +22,7 @@ namespace MyCompany.RogueSmash.Prototype
         private BoxCollider2D bc2d;
         private Vector2 movement;
         private bool grounded = false;
+        private bool bc2dFlipped = false;
 
 
         public void FixedUpdate()
@@ -32,8 +33,9 @@ namespace MyCompany.RogueSmash.Prototype
             float v = Input.GetAxisRaw("Vertical");
 
             grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
+             
             anim.SetBool("ground", grounded);
-
+            
             anim.SetFloat("vSpeed", rb2d.velocity.y);
             anim.SetFloat("Speed", Mathf.Abs(h));
 
@@ -41,6 +43,19 @@ namespace MyCompany.RogueSmash.Prototype
 
 
             rb2d.velocity = new Vector2(h * speed, rb2d.velocity.y);
+
+            if (spriteRenderer.flipX && !bc2dFlipped )
+            {
+                //Debug.LogError("bc2dFlipped is:" + bc2dFlipped);
+                bc2d.offset = new Vector2(bc2d.offset.x * -1, bc2d.offset.y);
+                bc2dFlipped = true;
+            }
+            else if(!spriteRenderer.flipX && bc2dFlipped)
+            {
+               // Debug.LogError("bc2dFlipped is:" + bc2dFlipped);
+                bc2d.offset = new Vector2(bc2d.offset.x * -1, bc2d.offset.y);
+                bc2dFlipped = false;
+            }
 
             //check to execute run anim
             Ismoving(h);
@@ -80,15 +95,13 @@ namespace MyCompany.RogueSmash.Prototype
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 spriteRenderer.flipX = true;
-                //not the offset 
-                //bc2d.offset = new Vector2(-1, 1); 
+                anim.SetBool("Ismoving", true);
 
             }
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 spriteRenderer.flipX = false;
-                //not the offset
-                //bc2d.offset = new Vector2(1, 1);
+                anim.SetBool("Ismoving", true);
             }
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
