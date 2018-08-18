@@ -536,6 +536,26 @@ Transform:
   m_Father: {fileID: 1052578455}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &682996063 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1047700269339750, guid: c708715356691c346ade81a7bf7e99ea,
+    type: 2}
+  m_PrefabInternal: {fileID: 1419699065}
+--- !u!114 &682996064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 682996063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5ef66453f88bfc45919e47b06ff9f19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Influence: {x: 1, y: 1}
+  m_DrawDebug: 0
+  m_Offset: {x: 0, y: 0}
+  m_VelocityToOffset: {x: 0.6, y: 0.1}
 --- !u!1 &843992317
 GameObject:
   m_ObjectHideFlags: 0
@@ -1618,6 +1638,8 @@ GameObject:
   - component: {fileID: 1772454581}
   - component: {fileID: 1772454580}
   - component: {fileID: 1772454579}
+  - component: {fileID: 1772454585}
+  - component: {fileID: 1772454584}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1670,7 +1692,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7.6736608
+  orthographic size: 4.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1693,9 +1715,46 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1772454578}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 0, z: -75.5}
+  m_LocalPosition: {x: -5.1, y: -1.14, z: -75.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1772454584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1772454578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc239a298246fa45bfa7b6357a68bf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Speed: {x: 2, y: 2}
+  m_ViewChangedThreshold: {x: 1, y: 3}
+  m_IsMovingThreshold: {x: 3, y: 5}
+  m_DrawDebug: 0
+--- !u!114 &1772454585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1772454578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9c99bf64ac69e947a7b7f4faf6a8e1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FocusList:
+  - {fileID: 682996064}
+  m_ActionRectSpaceAdded: 12
+  m_CameraLimits:
+    serializedVersion: 2
+    x: -500
+    y: -500
+    width: 1000
+    height: 1000
+  m_DrawDebug: 0
+  m_AutoAddFocus: 0

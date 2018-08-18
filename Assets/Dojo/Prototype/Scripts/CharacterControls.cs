@@ -19,6 +19,7 @@ namespace MyCompany.RogueSmash.Prototype
         private Animator anim;
         private Rigidbody2D rb2d;
         private SpriteRenderer spriteRenderer;
+        private BoxCollider2D bc2d;
         private Vector2 movement;
         private bool grounded = false;
 
@@ -35,25 +36,16 @@ namespace MyCompany.RogueSmash.Prototype
 
             anim.SetFloat("vSpeed", rb2d.velocity.y);
             anim.SetFloat("Speed", Mathf.Abs(h));
-           
+
+            if (anim.GetBool("Iscrouch") == true) return;
+
+
             rb2d.velocity = new Vector2(h * speed, rb2d.velocity.y);
-
-            Debug.LogError("velocity" + rb2d.velocity);
-
-            //nextMovement(h, v);
 
             //check to execute run anim
             Ismoving(h);
  
         }
-        
-        //private void nextMovement(float h, float v)
-        //{
-           
-        //    movement.Set(h, v);
-        //    movement = movement * speed * Time.deltaTime;
-        //    rb2d.MovePosition (rb2d.position + movement);
-        //}
 
         void Ismoving (float h)
         {
@@ -66,6 +58,7 @@ namespace MyCompany.RogueSmash.Prototype
             anim = GetComponent<Animator>();
             rb2d = GetComponent<Rigidbody2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
+            bc2d = GetComponent<BoxCollider2D>();
 
             if (groundCheck == null)
             {
@@ -87,11 +80,15 @@ namespace MyCompany.RogueSmash.Prototype
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 spriteRenderer.flipX = true;
+                //not the offset 
+                //bc2d.offset = new Vector2(-1, 1); 
 
             }
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 spriteRenderer.flipX = false;
+                //not the offset
+                //bc2d.offset = new Vector2(1, 1);
             }
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
