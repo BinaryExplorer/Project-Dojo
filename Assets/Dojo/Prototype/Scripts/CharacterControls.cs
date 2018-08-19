@@ -21,16 +21,25 @@ namespace MyCompany.RogueSmash.Prototype
         private SpriteRenderer spriteRenderer;
         private BoxCollider2D bc2d;
         private Vector2 movement;
-        private bool grounded = false;
+        private bool grounded = true;
         private bool bc2dFlipped = false;
-
+       [SerializeField] private float h;        
+       [SerializeField] private float v;
+        private bool idlePlay = false;
 
         public void FixedUpdate()
         {
-            //is the player moving horizontal?
-            float h = Input.GetAxisRaw("Horizontal");
-            //freeze vertical axis unless jumping
-            float v = Input.GetAxisRaw("Vertical");
+            h = Input.GetAxisRaw("Horizontal");
+            v = Input.GetAxisRaw("Vertical");
+
+            //if (h > 0)
+            //{
+            //    spriteRenderer.flipX = false;
+            //}
+            //else if (h < 0)
+            //{
+            //    spriteRenderer.flipX = true;
+            //}
 
             grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
              
@@ -44,20 +53,12 @@ namespace MyCompany.RogueSmash.Prototype
 
             rb2d.velocity = new Vector2(h * speed, rb2d.velocity.y);
 
-            if (spriteRenderer.flipX && !bc2dFlipped )
+            if ((v > 0) && grounded)
             {
-                //Debug.LogError("bc2dFlipped is:" + bc2dFlipped);
-                bc2d.offset = new Vector2(bc2d.offset.x * -1, bc2d.offset.y);
-                bc2dFlipped = true;
-            }
-            else if(!spriteRenderer.flipX && bc2dFlipped)
-            {
-               // Debug.LogError("bc2dFlipped is:" + bc2dFlipped);
-                bc2d.offset = new Vector2(bc2d.offset.x * -1, bc2d.offset.y);
-                bc2dFlipped = false;
+                anim.SetBool("ground", false);
+                rb2d.AddForce(new Vector2(0, jumpForce));
             }
 
-            //check to execute run anim
             Ismoving(h);
  
         }
@@ -85,33 +86,47 @@ namespace MyCompany.RogueSmash.Prototype
         private void Update()
         {
             //Check in which direction the sprite should face and flip accordingly
-            //ONLY SPRITE RENDERER STUFF SHOULD GO HERE.
 
-            if ((Input.GetKeyDown(KeyCode.UpArrow)) && grounded) {
-                anim.SetBool("ground", false);
-                rb2d.AddForce(new Vector2(0, jumpForce));
-            }
-
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            if (h > 0)
             {
-                spriteRenderer.flipX = true;
-                anim.SetBool("Ismoving", true);
-
-            }
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
+                idlePlay = false;
                 spriteRenderer.flipX = false;
-                anim.SetBool("Ismoving", true);
             }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            else if (h < 0)
+            {
+                idlePlay = false;
+                spriteRenderer.flipX = true;
+            }
+            else if (h == 0 && !idlePlay)
+            {
+                idlePlay = true;
+                for (int count = 1; count <= 3; count++)
+                {
+                    Debug.Log("idle animation played" + count);
+                    anim.Play("Idle");
+                }
+            }
+
+            if (spriteRenderer.flipX && !bc2dFlipped)
+            {
+                //Debug.LogError("bc2dFlipped is:" + bc2dFlipped);
+                bc2d.offset = new Vector2(bc2d.offset.x * -1, bc2d.offset.y);
+                bc2dFlipped = true;
+            }
+            else if (!spriteRenderer.flipX && bc2dFlipped)
+            {
+                // Debug.LogError("bc2dFlipped is:" + bc2dFlipped);
+                bc2d.offset = new Vector2(bc2d.offset.x * -1, bc2d.offset.y);
+                bc2dFlipped = false;
+            }
+
+            if (v < 0)
             {
                 anim.SetBool("Iscrouch", true);
-                Debug.Log("Iscrouch is true");
             }
-            if (Input.GetKeyUp(KeyCode.DownArrow))
+            if (v == 0)
             {
                 anim.SetBool("Iscrouch", false);
-                Debug.Log("Iscrouch is false");
             }
         }
        
