@@ -23,22 +23,22 @@ namespace MyCompany.RogueSmash.Prototype
         private Vector2 movement;
         private bool grounded = true;
         private bool bc2dFlipped = false;
-       [SerializeField] private float h;        
-       [SerializeField] private float v;
-        private bool idlePlay = false;
+        private float tagSpeed = 0;
 
         public void FixedUpdate()
         {
-            h = Input.GetAxisRaw("Horizontal");
-            v = Input.GetAxisRaw("Vertical");
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+            
 
+            
             //if (h > 0)
             //{
             //    spriteRenderer.flipX = false;
             //}
             //else if (h < 0)
             //{
-            //    spriteRenderer.flipX = true;
+            //    spriteRendere.r.flipX = true;
             //}
 
             grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
@@ -46,17 +46,22 @@ namespace MyCompany.RogueSmash.Prototype
             anim.SetBool("ground", grounded);
             
             anim.SetFloat("vSpeed", rb2d.velocity.y);
+
+            Debug.LogError("max vspeed is: " + anim.GetFloat("vSpeed"));
+
             anim.SetFloat("Speed", Mathf.Abs(h));
 
-            if (anim.GetBool("Iscrouch") == true) return;
-
+            if (anim.GetBool("Iscrouch")) return;
 
             rb2d.velocity = new Vector2(h * speed, rb2d.velocity.y);
 
-            if ((v > 0) && grounded)
+            if (h > 0)
             {
-                anim.SetBool("ground", false);
-                rb2d.AddForce(new Vector2(0, jumpForce));
+                spriteRenderer.flipX = false;
+            }
+            else if (h < 0)
+            {
+                spriteRenderer.flipX = true;
             }
 
             Ismoving(h);
@@ -85,28 +90,12 @@ namespace MyCompany.RogueSmash.Prototype
 
         private void Update()
         {
+            if ((Input.GetKeyDown(KeyCode.Space) && grounded))
+            {
+                anim.SetBool("ground", false);
+                rb2d.AddForce(new Vector2(0, jumpForce));
+            }
             //Check in which direction the sprite should face and flip accordingly
-
-            if (h > 0)
-            {
-                idlePlay = false;
-                spriteRenderer.flipX = false;
-            }
-            else if (h < 0)
-            {
-                idlePlay = false;
-                spriteRenderer.flipX = true;
-            }
-            else if (h == 0 && !idlePlay)
-            {
-                idlePlay = true;
-                for (int count = 1; count <= 3; count++)
-                {
-                    Debug.Log("idle animation played" + count);
-                    anim.Play("Idle");
-                }
-            }
-
             if (spriteRenderer.flipX && !bc2dFlipped)
             {
                 //Debug.LogError("bc2dFlipped is:" + bc2dFlipped);
@@ -120,11 +109,11 @@ namespace MyCompany.RogueSmash.Prototype
                 bc2dFlipped = false;
             }
 
-            if (v < 0)
+            if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 anim.SetBool("Iscrouch", true);
             }
-            if (v == 0)
+            else
             {
                 anim.SetBool("Iscrouch", false);
             }
